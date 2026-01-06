@@ -57,9 +57,11 @@
 #' @details
 #'
 #' **isProximityMatrix**
-#'
+#' 
 #' If \code{isProximityMatrix = TRUE}, you may directly provide a proximity matrix as the input \code{data}.
-#' In this case, only row-based settings will be applied, such as \code{row.order}, \code{row.flip}, and \code{row.externalOrder}.
+#' In this case, the provided proximity matrix is treated as the “original matrix” for visualization;
+#' therefore \code{original.color} and \code{exp.originalmatrix} control the display of the input matrix (i.e., the proximity matrix).
+#' Accordingly, only row-based settings will be applied, such as \code{row.order}, \code{row.flip}, \code{row.externalOrder}, \code{row.name}, \code{row.label.size}, \code{exp.row_order}, and \code{exp.row_names}.
 #' Note that correlation matrices (e.g., \code{"pearson"}) must be converted to distance matrices before being used,
 #' and the selected color scheme must also be one of the supported diverging palettes (e.g., \code{"GAP_Blue_White_Red"}, \code{"BrBG"}, \code{"PiYG"}, \code{"PRGn"}, \code{"PuOr"}, \code{"RdBu"}, \code{"RdGy"}).
 #'
@@ -67,7 +69,8 @@
 #'
 #' These parameters are used to specify which columns in \code{data} should be treated as covariates
 #' on the X or Y axes. Provide the column indices (e.g., \code{XdNum = c(3, 5)}) of discrete or continuous variables.
-#'
+#' Discrete covariates (Xd and Yd) are used as provided in the input data and treated as categorical labels.
+#' 
 #' **Xd.name, Xc.name**
 #'
 #' If not provided, the default labels will be a sequence of numbers based on the number of selected variables (e.g., "1", "2", ..., up to the length of XdNum or XcNum).
@@ -174,12 +177,13 @@
 #'   \item \code{"GAP_Rainbow"}
 #'   \item \code{"GAP_Blue_White_Red"}
 #'   \item \code{"GAP_d"}
-#'   \item \code{"grayscale_palette"}
+#'   \item \code{"grayscale_palette"} (for Binary data)
 #' }
 #'
 #' You may also specify any palette name from the \code{RColorBrewer} package.
 #' However, note that some palettes—such as those under the "Qualitative" category—are not suitable for visualizing continuous data like proximity matrices.
-#'
+#' For gray-scale representations of continuous matrices, the \code{"Greys"} palette from \code{RColorBrewer} can be used.
+#' 
 #' All palette names must be passed as character strings (e.g., \code{"GAP_Rainbow"}, \code{"Set1"}).
 #'
 #' \strong{original.color}:
@@ -1115,7 +1119,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       default_originalcolor <- grayscale_palette
     }
   } else {
-    if (!is.null(original.color) && original.color %in% rownames(brewer.pal.info)) {
+    if (!is.null(original.color) && length(original.color) == 1 && original.color %in% rownames(brewer.pal.info)) {
       originalcolor_category <- brewer.pal.info[original.color, 'category']
 
       if (originalcolor_category == 'qual') {
@@ -1127,7 +1131,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         max_originalcolors <- brewer.pal.info[original.color, 'maxcolors']
         default_originalcolor <- brewer.pal(max_originalcolors, original.color)
       }
-    } else if (!is.null(original.color) && original.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+    } else if (!is.null(original.color) && length(original.color) == 1 && original.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
       default_originalcolor <- get(original.color, envir = .GlobalEnv)
     } else if (!is.null(original.color) && !(original.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red'))) {
       default_originalcolor <- original.color
@@ -1138,7 +1142,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
 
   # row
   if (!is.null(row.prox)) {
-    if (!is.null(row.color) && row.color %in% rownames(brewer.pal.info)) {
+    if (!is.null(row.color) && length(row.color) == 1 && row.color %in% rownames(brewer.pal.info)) {
       rowcolor_category <- brewer.pal.info[row.color, 'category']
 
       if (rowcolor_category == 'qual') {
@@ -1156,7 +1160,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         max_rowcolors <- brewer.pal.info[row.color, 'maxcolors']
         default_rowcolor <- brewer.pal(max_rowcolors, row.color)
       }
-    } else if (!is.null(row.color) && row.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+    } else if (!is.null(row.color) && length(row.color) == 1 && row.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
       if (row.prox %in% c('euclidean','city-block', 'maximum', 'canberra', 'hamman', 'jaccard', 'phi', 'rao', 'rogers', 'simple', 'sneath', 'yule')
           && row.color == 'GAP_Blue_White_Red') {
         stop(sprintf(
@@ -1189,7 +1193,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
 
   # column
   if (!is.null(col.prox)) {
-    if (!is.null(col.color) && col.color %in% rownames(brewer.pal.info)) {
+    if (!is.null(col.color) && length(col.color) == 1 && col.color %in% rownames(brewer.pal.info)) {
       colcolor_category <- brewer.pal.info[col.color, 'category']
 
       if (colcolor_category == 'qual') {
@@ -1207,7 +1211,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         max_colcolors <- brewer.pal.info[col.color, 'maxcolors']
         default_colcolor <- brewer.pal(max_colcolors, col.color)
       }
-    } else if (!is.null(col.color) && col.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+    } else if (!is.null(col.color) && length(col.color) == 1 && col.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
       if (col.prox %in% c('euclidean','city-block', 'maximum', 'canberra', 'hamman', 'jaccard', 'phi', 'rao', 'rogers', 'simple', 'sneath', 'yule')
           && col.color == 'GAP_Blue_White_Red') {
         stop(sprintf(
@@ -1250,7 +1254,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
 
   if (isTRUE(is_binary_data(data_matrix, TRUE))) {
     original_colorbar <- Legend(
-      title = 'original plot',
+      title = 'data matrix',
       at = c(0, 1),
       labels = c('0', '1'),
       legend_gp = gpar(fill = c('white', 'black')),
@@ -1258,11 +1262,13 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       grid_height = unit(.5,  'cm'),
       grid_width = unit(.5, 'cm'),
       title_gp = gpar(fontsize = 10, fontface = 'bold'),
-      labels_gp = gpar(fontsize = 8)
+      labels_gp = gpar(fontsize = 8),
+      tick_length = unit(0, 'mm'),
+      border = '#00000000'
     )
   } else {
     original_colorbar <- Legend(
-      title = if (isFALSE(isProximityMatrix)) 'original plot' else 'original plot (proximity)',
+      title = if (isFALSE(isProximityMatrix)) 'data matrix' else 'data matrix (proximity)',
       at = c(original_colorbar_info$colorbar_min, original_colorbar_info$colorbar_mid, original_colorbar_info$colorbar_max),
       labels = c(original_colorbar_info$colorbar_min, original_colorbar_info$colorbar_mid, original_colorbar_info$colorbar_max),
       col_fun = original_colorbar_info$colorbar_function,
@@ -1270,7 +1276,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       legend_width = unit(4, 'cm'),
       legend_height = unit(.8, 'cm'),
       title_gp = gpar(fontsize = 10, fontface = 'bold'),
-      labels_gp = gpar(fontsize = 8)
+      labels_gp = gpar(fontsize = 8),
+      tick_length = unit(0, 'mm'),
+      border = '#00000000'
     )
   }
 
@@ -1287,7 +1295,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     row_colorbar_info <- colorbar_fun(distance_matrix_for_row_hc, row.color)
 
     row_colorbar <- Legend(
-      title = 'row proximity',
+      title = 'row proximity: Euclidean distance',
       at = c(row_colorbar_info$colorbar_min, row_colorbar_info$colorbar_mid, row_colorbar_info$colorbar_max),
       labels = c(row_colorbar_info$colorbar_min, row_colorbar_info$colorbar_mid, row_colorbar_info$colorbar_max),
       col_fun = row_colorbar_info$colorbar_function,
@@ -1295,7 +1303,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       legend_width = unit(4, 'cm'),
       legend_height = unit(.8, 'cm'),
       title_gp = gpar(fontsize = 10, fontface = 'bold'),
-      labels_gp = gpar(fontsize = 8)
+      labels_gp = gpar(fontsize = 8),
+      tick_length = unit(0, 'mm'),
+      border = '#00000000'
     )
   }
 
@@ -1312,7 +1322,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     col_colorbar_info <- colorbar_fun(distance_matrix_for_column_hc, col.color)
 
     col_colorbar <- Legend(
-      title = 'column proximity',
+      title = "column proximity: Pearson's correlation",
       at = c(col_colorbar_info$colorbar_min, col_colorbar_info$colorbar_mid, col_colorbar_info$colorbar_max),
       labels = c(col_colorbar_info$colorbar_min, col_colorbar_info$colorbar_mid, col_colorbar_info$colorbar_max),
       col_fun = col_colorbar_info$colorbar_function,
@@ -1320,7 +1330,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       legend_width = unit(4, 'cm'),
       legend_height = unit(.8, 'cm'),
       title_gp = gpar(fontsize = 10, fontface = 'bold'),
-      labels_gp = gpar(fontsize = 8)
+      labels_gp = gpar(fontsize = 8),
+      tick_length = unit(0, 'mm'),
+      border = '#00000000'
     )
   }
 
@@ -1404,7 +1416,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Xc_encoded <- get(paste0('Xc_encoded_', i))
 
       if (!is.null(Xc.color)) {
-        if (Xc.color %in% rownames(brewer.pal.info)) {
+        if (length(Xc.color) == 1 && Xc.color %in% rownames(brewer.pal.info)) {
           Xccolor_category <- brewer.pal.info[Xc.color, 'category']
 
           if (Xccolor_category == 'qual') {
@@ -1416,7 +1428,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
             max_Xccolors <- brewer.pal.info[Xc.color, 'maxcolors']
             default_Xccolor <- brewer.pal(max_Xccolors, Xc.color)
           }
-        } else if (Xc.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+        } else if (length(Xc.color) == 1 && Xc.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
           default_Xccolor <- get(Xc.color, envir = .GlobalEnv)
         } else {
           default_Xccolor <- Xc.color
@@ -1437,7 +1449,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         legend_width = unit(4, 'cm'),
         legend_height = unit(.8, 'cm'),
         title_gp = gpar(fontsize = 10, fontface = 'bold'),
-        labels_gp = gpar(fontsize = 8)
+        labels_gp = gpar(fontsize = 8),
+        tick_length = unit(0, 'mm'),
+        border = '#00000000'
       )
 
       Xc_plots[[i]] <- Heatmap(
@@ -1467,7 +1481,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yc_encoded <- get(paste0('Yc_encoded_', i))
 
       if (!is.null(Yc.color)) {
-        if (Yc.color %in% rownames(brewer.pal.info)) {
+        if (length(Yc.color) == 1 && Yc.color %in% rownames(brewer.pal.info)) {
           Yccolor_category <- brewer.pal.info[Yc.color, 'category']
 
           if (Yccolor_category == 'qual') {
@@ -1479,7 +1493,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
             max_Yccolors <- brewer.pal.info[Yc.color, 'maxcolors']
             default_Yccolor <- brewer.pal(max_Yccolors, Yc.color)
           }
-        } else if (Yc.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+        } else if (length(Yc.color) == 1 && Yc.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
           default_Yccolor <- get(Yc.color, envir = .GlobalEnv)
         } else {
           default_Yccolor <- Yc.color
@@ -1500,7 +1514,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         legend_width = unit(4, 'cm'),
         legend_height = unit(.8, 'cm'),
         title_gp = gpar(fontsize = 10, fontface = 'bold'),
-        labels_gp = gpar(fontsize = 8)
+        labels_gp = gpar(fontsize = 8),
+        tick_length = unit(0, 'mm'),
+        border = '#00000000'
       )
 
       Yc_plots[[i]] <- Heatmap(
@@ -1530,12 +1546,12 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Xd_encoded <- get(paste0('Xd_encoded_', i))
 
       if (!is.null(Xd.color)) {
-        if (Xd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+        if (length(Xd.color) == 1 && Xd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
           stop(sprintf(
             "Error: '%s' cannot be used for categorical data. Please use a qualitative color spectrum instead.",
             Xd.color
           ))
-        } else if (Xd.color %in% rownames(brewer.pal.info)) {
+        } else if (length(Xd.color) == 1 && Xd.color %in% rownames(brewer.pal.info)) {
           Xdcolor_category <- brewer.pal.info[Xd.color, 'category']
 
           if (Xdcolor_category == 'qual') {
@@ -1557,7 +1573,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
               ifelse(Xdcolor_category == 'seq', 'Sequential', 'Diverging')
             ))
           }
-        } else if (Xd.color == 'GAP_d') {
+        } else if (length(Xd.color) == 1 && Xd.color == 'GAP_d') {
           default_Xdcolor <- GAP_d[1:length(unique(Xd_encoded))]
         } else {
           default_Xdcolor <- Xd.color
@@ -1576,7 +1592,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Xd_label <- Xd_encoding_maps[[paste0('Xd_', i)]]
 
       Xd_colorbar[[i]] <- Legend(
-        title = paste('Xd Categories of', Xd.name[i]),
+        title = paste('symptom groups of', Xd.name[i]),
         at = Xd_label$Encoding,
         labels = Xd_label$Original ,
         legend_gp = gpar(fill = default_Xdcolor),
@@ -1584,7 +1600,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         grid_height = unit(.5,  'cm'),
         grid_width = unit(.5, 'cm'),
         title_gp = gpar(fontsize = 10, fontface = 'bold'),
-        labels_gp = gpar(fontsize = 8)
+        labels_gp = gpar(fontsize = 8),
+        tick_length = unit(0, 'mm'),
+        border = '#00000000'
       )
 
       Xd_plots[[i]] <- Heatmap(
@@ -1615,12 +1633,12 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yd_encoded <- get(paste0('Yd_encoded_', i))
 
       if (!is.null(Yd.color)) {
-        if (Yd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+        if (length(Yd.color) == 1 && Yd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
           stop(sprintf(
             "Error: '%s' cannot be used for categorical data. Please use a qualitative color spectrum instead.",
             Yd.color
           ))
-        } else if (Yd.color %in% rownames(brewer.pal.info)) {
+        } else if (length(Yd.color) == 1 && Yd.color %in% rownames(brewer.pal.info)) {
           Ydcolor_category <- brewer.pal.info[Yd.color, 'category']
 
           if (Ydcolor_category == 'qual') {
@@ -1642,7 +1660,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
               ifelse(Ydcolor_category == 'seq', 'Sequential', 'Diverging')
             ))
           }
-        } else if (Yd.color == 'GAP_d') {
+        } else if (length(Yd.color) == 1 && Yd.color == 'GAP_d') {
           default_Ydcolor <- GAP_d[1:length(unique(Yd_encoded))]
         } else {
           default_Ydcolor <- Yd.color
@@ -1661,7 +1679,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yd_label <- Yd_encoding_maps[[paste0('Yd_', i)]]
 
       Yd_colorbar[[i]] <- Legend(
-        title = paste('Yd Categories of', colnames(data)[YdNum[i]]),
+        title = paste('patient groups by', colnames(data)[YdNum[i]]),
         at = Yd_label$Encoding,
         labels = Yd_label$Original,
         legend_gp = gpar(fill = default_Ydcolor),
@@ -1669,7 +1687,9 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
         grid_height = unit(.5,  'cm'),
         grid_width = unit(.5, 'cm'),
         title_gp = gpar(fontsize = 10, fontface = 'bold'),
-        labels_gp = gpar(fontsize = 8)
+        labels_gp = gpar(fontsize = 8),
+        tick_length = unit(0, 'mm'),
+        border = '#00000000'
       )
 
       Yd_plots[[i]] <- Heatmap(
@@ -2423,14 +2443,17 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     result$row_order <- order_row
   }
 
-  if ((col.order %in% c('single', 'complete', 'average')) && isFALSE(isProximityMatrix)) {
-    order_col <- column_order(col_prox_ht)
-  } else if (col.order == 'original') {
-    order_col <- 1:length(column_names)
-  } else {
-    order_col <- order_col
+  if (isFALSE(isProximityMatrix)) {
+    if ((col.order %in% c('single', 'complete', 'average'))) {
+      order_col <- column_order(col_prox_ht)
+    } else if (col.order == 'original') {
+      order_col <- 1:length(column_names)
+    } else {
+      order_col <- order_col
+    }
   }
-  if (isTRUE(exp.column_order)) {
+  
+  if (isTRUE(exp.column_order) && isFALSE(isProximityMatrix)) {
     result$column_order <- order_col
   }
 
