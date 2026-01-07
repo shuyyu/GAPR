@@ -39,7 +39,7 @@ library(GAPR)
 ```
 ![CRABS dataset](CRABS.png)
 
-GAPR provides flexible visualization and output options that allow users to customize the appearance of matrix layouts and manage exported results.
+`GAP()` provides flexible visualization and output options that allow users to customize the appearance of matrix layouts and manage exported results.
 
 These options include:
 - Color settings for all matrices
