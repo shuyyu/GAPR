@@ -1295,7 +1295,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     row_colorbar_info <- colorbar_fun(distance_matrix_for_row_hc, row.color)
 
     row_colorbar <- Legend(
-      title = 'row proximity: Euclidean distance',
+      title = 'row proximity matrix',
       at = c(row_colorbar_info$colorbar_min, row_colorbar_info$colorbar_mid, row_colorbar_info$colorbar_max),
       labels = c(row_colorbar_info$colorbar_min, row_colorbar_info$colorbar_mid, row_colorbar_info$colorbar_max),
       col_fun = row_colorbar_info$colorbar_function,
@@ -1322,7 +1322,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     col_colorbar_info <- colorbar_fun(distance_matrix_for_column_hc, col.color)
 
     col_colorbar <- Legend(
-      title = "column proximity: Pearson's correlation",
+      title = "column proximity matrix",
       at = c(col_colorbar_info$colorbar_min, col_colorbar_info$colorbar_mid, col_colorbar_info$colorbar_max),
       labels = c(col_colorbar_info$colorbar_min, col_colorbar_info$colorbar_mid, col_colorbar_info$colorbar_max),
       col_fun = col_colorbar_info$colorbar_function,
@@ -1441,7 +1441,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Xc_colorbar_info <- colorbar_fun(Xc_encoded, Xc.color)
 
       Xc_colorbars[[i]] <- Legend(
-        title = paste('Xc plot of', Xc.name[i]),
+        title = paste('Xc matrix of', Xc.name[i]),
         at = c(Xc_colorbar_info$colorbar_min, Xc_colorbar_info$colorbar_mid, Xc_colorbar_info$colorbar_max),
         labels = c(Xc_colorbar_info$colorbar_min, Xc_colorbar_info$colorbar_mid, Xc_colorbar_info$colorbar_max),
         col_fun = Xc_colorbar_info$colorbar_function,
@@ -1506,7 +1506,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yc_colorbar_info <- colorbar_fun(Yc_encoded, Yc.color)
 
       Yc_colorbars[[i]] <- Legend(
-        title = paste('Yc plot of', colnames(data)[YcNum[i]]),
+        title = paste('Yc matrix of', colnames(data)[YcNum[i]]),
         at = c(Yc_colorbar_info$colorbar_min, Yc_colorbar_info$colorbar_mid, Yc_colorbar_info$colorbar_max),
         labels = c(Yc_colorbar_info$colorbar_min, Yc_colorbar_info$colorbar_mid, Yc_colorbar_info$colorbar_max),
         col_fun = Yc_colorbar_info$colorbar_function,
@@ -1592,7 +1592,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Xd_label <- Xd_encoding_maps[[paste0('Xd_', i)]]
 
       Xd_colorbar[[i]] <- Legend(
-        title = paste('symptom groups of', Xd.name[i]),
+        title = paste('Xd categories of', Xd.name[i]),
         at = Xd_label$Encoding,
         labels = Xd_label$Original ,
         legend_gp = gpar(fill = default_Xdcolor),
@@ -1679,7 +1679,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yd_label <- Yd_encoding_maps[[paste0('Yd_', i)]]
 
       Yd_colorbar[[i]] <- Legend(
-        title = paste('patient groups by', colnames(data)[YdNum[i]]),
+        title = paste('Yd categories of', colnames(data)[YdNum[i]]),
         at = Yd_label$Encoding,
         labels = Yd_label$Original,
         legend_gp = gpar(fill = default_Ydcolor),
