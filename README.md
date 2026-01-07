@@ -39,6 +39,16 @@ library(GAPR)
 ```
 ![CRABS dataset](CRABS.png)
 
+GAPR provides flexible visualization and output options that allow users to customize the appearance of matrix layouts and manage exported results.
+
+These options include:
+- Color settings for all matrices
+- Label size settings
+- Export-related options (e.g., `exp.*`)
+- PNG output configuration
+
+## Other Functions
+
 In addition to the main `GAP()` function, GAPR provides several user-accessible functions that can be used for specific analysis tasks:
 
 - **Proximity computation**:  
