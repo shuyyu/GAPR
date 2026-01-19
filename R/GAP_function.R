@@ -385,11 +385,18 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
   }
 
   rows_to_remove <- if (!is.null(c(XcNum, XdNum))) sort(c(XcNum, XdNum)) else NULL
-  cols_to_remove <- if (!is.null(c(YcNum, YdNum))) {
-    sort(unique(c(YcNum, YdNum, setdiff(row.name, c(YcNum, YdNum)))))
-  } else {
-    NULL
+  
+  rowname_cols <- NULL
+  
+  if (!is.null(row.name) && length(row.name) != nrow(data)) { # row names are in the data set
+    if (is.numeric(row.name)) {
+      rowname_cols <- row.name
+    }
   }
+  
+  cols_to_remove <- sort(unique(c(YcNum, YdNum, rowname_cols)))
+  
+  cols_to_remove <- if (length(cols_to_remove) == 0) NULL else cols_to_remove
 
   ## Xc, Xd
   if (!is.null(XcNum)) {
@@ -445,7 +452,8 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       } else if (length(row.name) == nrow(data))  {
         row_names <- row.name
       } else if (length(row.name) == 1) {
-        row_names <- data[, row.name]
+        # row_names <- data[, row.name]
+        row_names <- data[[row.name]]
       } else {
         row_names <- do.call(paste0, as.list(data[, row.name]))
       }
@@ -457,7 +465,8 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       } else if (length(row.name) == nrow(data))  {
         row_names <- row.name
       } else if (length(row.name) == 1) {
-        row_names <- data[-rows_to_remove, row.name]
+        # row_names <- data[-rows_to_remove, row.name]
+        row_names <- data[[row.name]][-rows_to_remove]
       } else {
         row_names <- do.call(paste0, as.list(data[-rows_to_remove, row.name]))
       }
@@ -469,7 +478,8 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       } else if (length(row.name) == nrow(data))  {
         row_names <- row.name
       } else if (length(row.name) == 1) {
-        row_names <- data[, row.name]
+        # row_names <- data[, row.name]
+        row_names <- data[[row.name]]
       } else {
         row_names <- do.call(paste0, as.list(data[, row.name]))
       }
@@ -481,7 +491,8 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       } else if (length(row.name) == nrow(data))  {
         row_names <- row.name
       } else if (length(row.name) == 1) {
-        row_names <- data[-rows_to_remove, row.name]
+        # row_names <- data[-rows_to_remove, row.name]
+        row_names <- data[[row.name]][-rows_to_remove]
       } else {
         row_names <- do.call(paste0, as.list(data[-rows_to_remove, row.name]))
       }
@@ -494,7 +505,8 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
     } else if (length(row.name) == nrow(data))  {
       row_names <- row.name
     } else if (length(row.name) == 1) {
-      row_names <- data[, row.name]
+      # row_names <- data[, row.name]
+      row_names <- data[[row.name]]
     } else {
       row_names <- do.call(paste0, as.list(data[, row.name]))
     }
@@ -1633,7 +1645,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       Yd_encoded <- get(paste0('Yd_encoded_', i))
 
       if (!is.null(Yd.color)) {
-        if (length(Yd.color) == 1 && Yd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
+        if (length(Xd.color) == 1 && Xd.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
           stop(sprintf(
             "Error: '%s' cannot be used for categorical data. Please use a qualitative color spectrum instead.",
             Yd.color
