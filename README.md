@@ -63,6 +63,7 @@ We use the Wine Quality dataset from the UCI Machine Learning Repository, which 
 
 ```r
 library(GAPR)
+
 ### --- loading data --- ###
 df_red <- read.csv("~path/winequality-red.csv", sep = ';', header = TRUE)
 df_red$color <- 'red'
@@ -75,8 +76,10 @@ minmax <- function(x){
 df_wine_norm <- df_wine
 df_wine_norm[, 1:11] <- as.data.frame(lapply(df_wine[, 1:11], minmax))
 
+### --- customized magenta–cyan palette --- ###
 magenta_cyan <- c('#ff00ff', '#00FFFF')
 
+### --- draw matrices --- ###
 wine_result <- GAP(data = df_wine_norm, YdNum = 13, YcNum = 12,
                    row.prox = 'euclidean', col.prox = 'pearson',
                    row.order = 'average', col.order = 'average',
