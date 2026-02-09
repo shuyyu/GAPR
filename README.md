@@ -95,7 +95,8 @@ wine_result <- GAP(data = df_wine_norm, YdNum = 13, YcNum = 12,
                    exp.originalmatrix = T,
                    exp.row_prox = T, exp.col_prox = T,
                    PNGwidth = 3600, PNGheight = 2400,
-                   PNGres = 300, show.plot = T)
+                   PNGres = 300, show.plot = T
+)
 ```
 ![wine dataset](WINE.svg)
 
