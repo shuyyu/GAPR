@@ -50,7 +50,7 @@ These options include:
 ## Example: Wine Quality Dataset
 This example demonstrates how to use **GAPR** to analyze the Wine Quality dataset.
 
-# Dataset
+**Dataset**
 
 We use the Wine Quality dataset from the UCI Machine Learning Repository, which contains physicochemical measurements and quality scores for red and white wines.
 
