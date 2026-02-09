@@ -56,7 +56,7 @@ We use the Wine Quality dataset from the UCI Machine Learning Repository, which 
 
 - Samples: 6,497 wines
 - Variables:
-  - 11 physicochemical variables (normalized to [0, 1] before analysis)
+  - 11 physicochemical variables (normalized to [0, 1])
   - Quality score (continuous covariate, Yc; 0–10)
   - Wine type (discrete covariate, Yd; "red" or "white")
 - Source: https://archive.ics.uci.edu/dataset/186/wine+quality
@@ -79,7 +79,7 @@ df_wine_norm[, 1:11] <- as.data.frame(lapply(df_wine[, 1:11], minmax))
 ### --- customized magenta–cyan palette --- ###
 magenta_cyan <- c('#ff00ff', '#00FFFF')
 
-### --- draw matrices --- ###
+### --- draw GAP --- ###
 wine_result <- GAP(data = df_wine_norm, YdNum = 13, YcNum = 12,
                    row.prox = 'euclidean', col.prox = 'pearson',
                    row.order = 'average', col.order = 'average',
@@ -124,7 +124,7 @@ The following options are used in this example:
   - Export reordered covariate information and codebooks (`exp.Yd`, `exp.Yc`, `exp.Yd_codebook`)
   - Export reordered data and proximity matrices (`exp.originalmatrix`, `exp.row_prox`, `exp.col_prox`)
 
-- **High-resolution output**
+- **High-resolution Output**
   - PNG size: 3600 × 2400 pixels
   - Resolution: 300 DPI
   - Automatic rendering enabled (`show.plot = TRUE`)
