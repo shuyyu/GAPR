@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="276.6698mm"
-   height="183.15547mm"
-   viewBox="0 0 276.6698 183.15547"
+   width="278.43451mm"
+   height="184.5869mm"
+   viewBox="0 0 278.43451 184.5869"
    version="1.1"
    id="svg1"
    inkscape:export-filename="fig4.pdf"
@@ -38,10 +38,10 @@
      inkscape:current-layer="layer1"
      inkscape:export-bgcolor="#ffffffff">
     <inkscape:page
-       x="5.9802858e-08"
-       y="4.5579199e-07"
-       width="276.6698"
-       height="183.15547"
+       x="0"
+       y="0"
+       width="278.43451"
+       height="184.58691"
        id="page2"
        margin="0"
        bleed="0" />
@@ -49,10 +49,23 @@
   <defs
      id="defs1" />
   <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="圖層 2"
+     transform="translate(0.8380595,0.47002974)">
+    <rect
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:0.204;stroke-opacity:0"
+       id="rect1"
+       width="278.2305"
+       height="184.3829"
+       x="-0.73605949"
+       y="-0.36802974" />
+  </g>
+  <g
      inkscape:label="圖層 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(45.181893,-110.74222)">
+     transform="translate(46.019952,-110.27219)">
     <path
        id="path1"
        d="M -16.716941,293.71067 H 31.161037 V 175.14782 h -47.877978 z"
