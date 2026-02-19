@@ -64,23 +64,30 @@ We use the Wine Quality dataset from the UCI Machine Learning Repository, which 
 ```r
 library(GAPR)
 
-### --- loading data --- ###
+### --- data processing--- ###
+## import data
 df_red <- read.csv("~path/winequality-red.csv", sep = ';', header = TRUE)
-df_red$color <- 'red'
 df_white <- read.csv("~path/winequality-white.csv", sep = ';', header = TRUE)
+
+## add a new column for Yd (color)
+df_red$color <- 'red'
 df_white$color <- 'white'
+
+## combine two datasets by row
 df_wine <- rbind(df_red, df_white)
-minmax <- function(x){
-  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
-}
-df_wine_norm <- df_wine
-df_wine_norm[, 1:11] <- as.data.frame(lapply(df_wine[, 1:11], minmax))
+
+## rank transformation
+ranked_wine <- as.data.frame(
+  apply(df_wine[, 1:11], 2, function(x) rank(x, ties.method = "average"))
+)
+ranked_wine$quality <- df_wine$quality
+ranked_wine$color <- df_wine$color
 
 ### --- customized magenta–cyan palette --- ###
 magenta_cyan <- c('#ff00ff', '#00FFFF')
 
 ### --- draw GAP --- ###
-wine_result <- GAP(data = df_wine_norm, YdNum = 13, YcNum = 12,
+wine_result <- GAP(data = ranked_wine, YdNum = 13, YcNum = 12,
                    row.prox = 'euclidean', col.prox = 'pearson',
                    row.order = 'average', col.order = 'average',
                    row.flip = 'r2e', col.flip = 'r2e',
