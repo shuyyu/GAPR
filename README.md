@@ -156,3 +156,9 @@ In addition to the main `GAP()` function, GAPR provides several user-accessible 
 
 - Function-level documentation: `?GAP`, `?computeProximity`, `?ellipse_sort`, `?hctree_sort`
 - Full function index: `help(package = "GAPR")`
+
+## Publication
+
+This work is published in *Journal of Open Research Software*:
+
+[![DOI](https://img.shields.io/badge/DOI-10.5334%2Fjors.669-blue)](https://doi.org/10.5334/jors.669)
