@@ -319,7 +319,11 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
   )
 
   colorbar_fun <- function (data, colorspectrum) {
-    if (colorspectrum %in% c('GAP_Rainbow', 'GAP_Blue_White_Red', 'GAP_d')) {
+    if (length(colorspectrum) > 1) {
+      # a user-supplied vector of colours
+      num_colorspectrum <- length(colorspectrum)
+      colorbar_colors <- colorspectrum
+    } else if (colorspectrum %in% c('GAP_Rainbow', 'GAP_Blue_White_Red', 'GAP_d')) {
       num_colorspectrum <- length(get(colorspectrum, envir = .GlobalEnv))
       colorbar_colors <- get(colorspectrum, envir = .GlobalEnv)
     } else if (colorspectrum %in% rownames(brewer.pal.info)) {
@@ -330,7 +334,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       colorbar_colors <- get(colorspectrum, envir = .GlobalEnv)
     }
 
-    if (colorspectrum %in% c('BrBG', 'PiYG', 'PRGn', 'PuOr', 'RdBu', 'RdGy', 'GAP_Blue_White_Red')) {
+    if (length(colorspectrum) == 1 && colorspectrum %in% c('BrBG', 'PiYG', 'PRGn', 'PuOr', 'RdBu', 'RdGy', 'GAP_Blue_White_Red')) {
       colorbar_min <- -1
       colorbar_max <- 1
       colorbar_mid <- 0
@@ -1145,7 +1149,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
       }
     } else if (!is.null(original.color) && length(original.color) == 1 && original.color %in% c('GAP_Rainbow', 'GAP_Blue_White_Red')) {
       default_originalcolor <- get(original.color, envir = .GlobalEnv)
-    } else if (!is.null(original.color) && !(original.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red'))) {
+    } else if (!is.null(original.color) && (length(original.color) > 1 || !(original.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red')))) {
       default_originalcolor <- original.color
     } else {
       default_originalcolor <- GAP_Rainbow
@@ -1192,7 +1196,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
                  && row.color == 'GAP_Blue_White_Red') {
         default_rowcolor <- GAP_Blue_White_Red_function
       }
-    } else if (!is.null(row.color) && !(row.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red'))) {
+    } else if (!is.null(row.color) && (length(row.color) > 1 || !(row.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red')))) {
       default_rowcolor <- row.color
     } else {
       if (row.prox %in% c('euclidean','city-block', 'maximum', 'canberra', 'hamman', 'jaccard', 'phi', 'rao', 'rogers', 'simple', 'sneath', 'yule')) {
@@ -1243,7 +1247,7 @@ GAP <- function(data, isProximityMatrix = FALSE, XdNum = NULL, XcNum = NULL, YdN
                  && col.color == 'GAP_Blue_White_Red') {
         default_colcolor <- GAP_Blue_White_Red_function
       }
-    } else if (!is.null(col.color) && !(col.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red'))) {
+    } else if (!is.null(col.color) && (length(col.color) > 1 || !(col.color %in% c(rownames(brewer.pal.info), 'GAP_Rainbow', 'GAP_Blue_White_Red')))) {
       default_colcolor <- col.color
     } else {
       if (col.prox %in% c('euclidean','city-block', 'maximum', 'canberra', 'hamman', 'jaccard', 'phi', 'rao', 'rogers', 'simple', 'sneath', 'yule')) {
